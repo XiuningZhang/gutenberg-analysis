@@ -1,0 +1,7 @@
+[project]
+name = "bookstats"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = []
+readme = "README.md"
+description = "A cumulative research project analyzing Project Gutenberg word distributions"

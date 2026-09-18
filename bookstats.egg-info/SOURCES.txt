@@ -1,0 +1,6 @@
+README.md
+pyproject.toml
+bookstats.egg-info/PKG-INFO
+bookstats.egg-info/SOURCES.txt
+bookstats.egg-info/dependency_links.txt
+bookstats.egg-info/top_level.txt
