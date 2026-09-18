@@ -22,7 +22,19 @@ Book files use `<five-digit-gutenberg-id>_<hyphenated-short-title>.txt`.
 
 ## Setup
 
-*To be added in Session 2.*
+# bookstats
+
+A cumulative research project analyzing word frequency distributions across classic literature from Project Gutenberg.
+
+## Setup Instructions
+
+This project requires Python 3.12 and [uv](https://docs.astral.sh/uv/).
+
+To reconstruct the virtual environment:
+
+```bash
+uv sync
+```
 
 ## Run the analysis
 

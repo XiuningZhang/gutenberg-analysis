@@ -3,7 +3,15 @@ name = "bookstats"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
+    "altair>=6.3.0",
+    "marimo>=0.24.2",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.3",
     "polars>=1.44.2",
 ]
 readme = "README.md"
 description = "A cumulative research project analyzing Project Gutenberg word distributions"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
