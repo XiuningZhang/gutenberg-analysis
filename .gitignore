@@ -1,3 +1,7 @@
 .venv/
 __pycache__/
 *.pyc
+
+# Generated data artifacts
+data/intermediate/
+data/processed/
