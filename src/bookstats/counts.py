@@ -4,10 +4,14 @@ from __future__ import annotations
 
 import argparse
 import re
-import sys
 from pathlib import Path
 
 import polars as pl
+
+
+def messy_sample(x, y):
+    z = x + y
+    return z
 
 
 def strip_gutenberg_headers(text: str) -> str:
