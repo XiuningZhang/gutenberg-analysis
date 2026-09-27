@@ -14,13 +14,19 @@ def _():
     import marimo as mo
     import polars as pl
 
-    return Path, alt, mo, pl
+    from bookstats.zipf import compute_zipf_fit
 
+    return Path, alt, compute_zipf_fit, mo, pl
+
+
+@app.cell
+def _(mo):
     mo.md(r"""
     # Book Word Frequency Analysis
 
     An interactive visualization of word frequency distributions across Project Gutenberg books.
     """)
+    return  # noqa: PLR1711 -- Marimo cell boundary.
 
 
 @app.cell
@@ -55,36 +61,59 @@ def _(counts_df, mo):
         value=books[0] if books else "None",
         label="Select a book:",
     )
-    # book_selector
+    book_selector  # noqa: B018 -- Display the dropdown as the cell output.
     return (book_selector,)
 
 
 @app.cell
-def _(alt, book_selector, counts_df, mo, pl):
-    mo.stop(book_selector.value == "None", mo.md("No books available."))
+def _(alt, book_selector, compute_zipf_fit, counts_df, mo, pl):
+    mo.stop(book_selector.value in (None, "None"), mo.md("No books available."))
 
-    selected_df = (
-        counts_df.filter(pl.col("book") == book_selector.value)
-        .sort("count", descending=True)
-        .head(30)
-    )
+    selected_df = counts_df.filter(pl.col("book") == book_selector.value)
+    mo.stop(selected_df.is_empty(), mo.md("No data for this book."))
+    fit = compute_zipf_fit(selected_df)
+    chart_data = alt.Data(values=fit.data.to_dicts())
 
-    chart = (
-        alt.Chart(selected_df)
-        .mark_bar()
+    points = (
+        alt.Chart(chart_data)
+        .mark_circle(opacity=0.4, size=15, color="#2563eb")
         .encode(
-            x=alt.X("count:Q", title="Frequency Count"),
-            y=alt.Y("word:N", sort="-x", title="Word"),
-            tooltip=["word", "count"],
-        )
-        .properties(
-            title=f"Top 30 Most Frequent Words: {book_selector.value}",
-            width=600,
-            height=500,
+            x=alt.X("rank:Q", scale=alt.Scale(type="log"), title="Rank (log scale)"),
+            y=alt.Y("count:Q", scale=alt.Scale(type="log"), title="Frequency (log scale)"),
+            tooltip=["word:N", "rank:Q", "count:Q"],
         )
     )
 
-    mo.ui.altair_chart(chart)
+    line = (
+        alt.Chart(chart_data)
+        .mark_line(color="#dc2626", strokeWidth=2)
+        .encode(
+            x=alt.X("rank:Q", scale=alt.Scale(type="log")),
+            y=alt.Y("fitted_count:Q", scale=alt.Scale(type="log")),
+            order=alt.Order("rank:Q"),
+        )
+    )
+    chart = (points + line).properties(
+        title=f"Descriptive Zipf Fit: {book_selector.value}",
+        width=600,
+        height=450,
+    )
+
+    mo.vstack(
+        [
+            mo.md(
+                f"""
+            **Slope:** {fit.slope:.4f}  
+            **Intercept:** {fit.intercept:.4f}  
+            **R²:** {fit.r_squared:.4f}
+
+            Blue points: observed counts. Red line: descriptive fit.
+            """
+            ),
+            mo.ui.altair_chart(chart),
+        ]
+    )
+    return  # noqa: PLR1711 -- Marimo cell boundary.
 
 
 if __name__ == "__main__":
