@@ -15,7 +15,7 @@ Xiuning
 
 Book files use `<five-digit-gutenberg-id>_<hyphenated-short-title>.txt`.
 
-## Repository contents
+## Repository contents (project structure)
 
 - `README.md`: project description and book inventory
 - `00084_frankenstein.txt`: plain text of *Frankenstein*
@@ -43,3 +43,7 @@ uv sync
 ## Reproduce the results
 
 *To be added in Session 4.*
+
+# Requirements
+
+# Minimal Examples

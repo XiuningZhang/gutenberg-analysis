@@ -4,10 +4,35 @@ from __future__ import annotations
 
 import argparse
 import re
-import sys
 from pathlib import Path
 
 import polars as pl
+
+
+def messy_sample(x: float, y: float) -> int | float:
+    """Messy function that adds two numbers.
+
+    Parameters
+    ----------
+    x : int or float
+        First number to add.
+    y : int or float
+        Second number to add.
+
+    Returns
+    -------
+    int or float
+        Sum of x and y.
+
+    Examples
+    --------
+    >>> messy_sample(1, 2)
+    3
+    >>> messy_sample(1.5, 2.5)
+    4.0
+    """
+    z = x + y
+    return z
 
 
 def strip_gutenberg_headers(text: str) -> str:
@@ -23,9 +48,7 @@ def strip_gutenberg_headers(text: str) -> str:
     str
         Text content with license headers and footers removed.
     """
-    start_match = re.search(
-        r"\*\*\* START OF THE PROJECT GUTENBERG EBOOK[^\n]*\*\*\*", text
-    )
+    start_match = re.search(r"\*\*\* START OF THE PROJECT GUTENBERG EBOOK[^\n]*\*\*\*", text)
     if start_match:
         text = text[start_match.end() :]
     end_match = re.search(r"\*\*\* END OF THE PROJECT GUTENBERG EBOOK", text)
@@ -71,9 +94,7 @@ def count_words(words: list[str]) -> pl.DataFrame:
             schema={"word": pl.String, "count": pl.UInt32},
         )
     df = pl.DataFrame({"word": words})
-    return (
-        df.group_by("word").agg(pl.len().alias("count")).sort("count", descending=True)
-    )
+    return df.group_by("word").agg(pl.len().alias("count")).sort("count", descending=True)
 
 
 def process_book_file(input_path: Path | str, output_path: Path | str) -> pl.DataFrame:
