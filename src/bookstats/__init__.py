@@ -8,8 +8,8 @@ from bookstats.counts import (
 )
 
 __all__ = [
-    "strip_gutenberg_headers",
-    "extract_words",
     "count_words",
+    "extract_words",
     "process_book_file",
+    "strip_gutenberg_headers",
 ]

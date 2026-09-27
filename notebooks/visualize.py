@@ -1,3 +1,5 @@
+"""Visualize the Gutenberg book analysis results."""
+
 import marimo
 
 __generated_with = "0.24.2"
@@ -7,21 +9,18 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     from pathlib import Path
+
     import altair as alt
     import marimo as mo
     import polars as pl
 
     return Path, alt, mo, pl
 
-
-@app.cell
-def _(mo):
     mo.md(r"""
     # Book Word Frequency Analysis
 
     An interactive visualization of word frequency distributions across Project Gutenberg books.
     """)
-    return
 
 
 @app.cell
@@ -50,17 +49,13 @@ def _(Path, pl):
 
 @app.cell
 def _(counts_df, mo):
-    books = (
-        sorted(counts_df["book"].unique().to_list())
-        if len(counts_df) > 0
-        else ["None"]
-    )
+    books = sorted(counts_df["book"].unique().to_list()) if len(counts_df) > 0 else ["None"]
     book_selector = mo.ui.dropdown(
         options=books,
         value=books[0] if books else "None",
         label="Select a book:",
     )
-    book_selector
+    # book_selector
     return (book_selector,)
 
 
@@ -90,7 +85,6 @@ def _(alt, book_selector, counts_df, mo, pl):
     )
 
     mo.ui.altair_chart(chart)
-    return
 
 
 if __name__ == "__main__":
