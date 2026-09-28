@@ -22,10 +22,10 @@ def _():
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Book Word Frequency Analysis
+	# Book Word Frequency Analysis
 
-    An interactive visualization of word frequency distributions across Project Gutenberg books.
-    """)
+	An interactive visualization of word frequency distributions across Project Gutenberg books.
+	""")
     return  # noqa: PLR1711 -- Marimo cell boundary.
 
 
@@ -103,12 +103,12 @@ def _(alt, book_selector, compute_zipf_fit, counts_df, mo, pl):
         [
             mo.md(
                 f"""
-            **Slope:** {fit.slope:.4f}  
-            **Intercept:** {fit.intercept:.4f}  
-            **R²:** {fit.r_squared:.4f}
+			**Slope:** {fit.slope:.4f}  
+			**Intercept:** {fit.intercept:.4f}  
+			**R²:** {fit.r_squared:.4f}
 
-            Blue points: observed counts. Red line: descriptive fit.
-            """
+			Blue points: observed counts. Red line: descriptive fit.
+			"""
             ),
             mo.ui.altair_chart(chart),
         ]
